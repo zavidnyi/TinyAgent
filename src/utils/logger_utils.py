@@ -14,6 +14,7 @@ LOG_FILE_PATH = os.path.join(TINY_AGENT_DIR, "log.txt")
 
 # Create the log file if it doesn't exist
 if not os.path.exists(LOG_FILE_PATH):
+    os.makedirs(os.path.dirname(LOG_FILE_PATH), exist_ok=True)
     with open(LOG_FILE_PATH, "w") as f:
         pass
 
