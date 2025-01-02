@@ -150,6 +150,7 @@ if __name__ == "__main__":
         logging_steps=10,
         packing=False,
         eval_packing=False,
+        report_to=["tensorboard"],
     )
 
     def compute_metrics(eval_pred):

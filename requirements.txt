@@ -14,7 +14,7 @@ async-timeout==4.0.3
 attrs==24.3.0
 babel==2.16.0
 beautifulsoup4==4.12.3
-bitsandbytes==0.43.2
+bitsandbytes==0.42.0
 black==24.10.0
 bleach==6.2.0
 bs4==0.0.1
@@ -46,6 +46,7 @@ huggingface-hub==0.27.0
 idna==3.10
 ipykernel==6.29.5
 ipython==8.31.0
+ipywidgets==8.1.5
 isoduration==20.11.0
 jedi==0.19.2
 Jinja2==3.1.5
@@ -64,6 +65,7 @@ jupyter_server_terminals==0.5.3
 jupyterlab==4.3.4
 jupyterlab_pygments==0.3.0
 jupyterlab_server==2.27.3
+jupyterlab_widgets==3.0.13
 langchain==0.1.0
 langchain-community==0.0.9
 langchain-core==0.1.7
@@ -139,6 +141,7 @@ stack-data==0.6.3
 starlette==0.37.2
 sympy==1.13.3
 tenacity==8.5.0
+tensorboardX==2.6.2.2
 terminado==0.18.1
 threadpoolctl==3.5.0
 tiktoken==0.5.2
@@ -162,5 +165,6 @@ wcwidth==0.2.13
 webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==1.8.0
+widgetsnbextension==4.0.13
 xxhash==3.5.0
 yarl==1.18.3
