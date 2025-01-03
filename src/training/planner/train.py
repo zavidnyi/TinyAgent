@@ -142,7 +142,7 @@ if __name__ == "__main__":
         eval_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,
-        max_seq_length=4096,
+        max_seq_length=4550,
         warmup_ratio=0.1,
         bf16=True,
         optim="adamw_8bit",
