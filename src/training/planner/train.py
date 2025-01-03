@@ -151,7 +151,6 @@ if __name__ == "__main__":
         packing=False,
         eval_packing=False,
         report_to=["tensorboard"],
-        resume_from_checkpoint= args.output_dir + "/checkpoint-10008",
     )
 
     def compute_metrics(eval_pred):
@@ -171,7 +170,7 @@ if __name__ == "__main__":
         processing_class=tokenizer,
     )
 
-    trainer.train()
+    trainer.train(resume_from_checkpoint=True)
 
     trainer.save_model(args.output_dir)
 
