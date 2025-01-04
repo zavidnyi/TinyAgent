@@ -1,3 +1,5 @@
+Original repository: https://github.com/SqueezeAILab/TinyAgent
+
 # TinyAgent: Function Calling at the Edge
 <!--- BADGES: START --->
 [![Arxiv](https://img.shields.io/badge/arXiv-2409.00608-B31B1B.svg)][#arxiv-paper-package]
