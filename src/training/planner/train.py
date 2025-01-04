@@ -1,28 +1,18 @@
 import argparse
 
-import numpy as np
 import torch
-from peft import LoraConfig, TaskType, get_peft_model
+from datasets import load_dataset
+from peft import LoraConfig, TaskType
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    Trainer,
-    TrainingArguments,
-    DataCollatorForLanguageModeling,
     BitsAndBytesConfig,
 )
-from datasets import load_dataset
-import ast
-
-from src.training.planner.evaluate import evaluate
-from src.utils.data_utils import initialize_data_objects, DataPointType
 from trl import (
     SFTTrainer,
     SFTConfig,
     DataCollatorForCompletionOnlyLM,
-    setup_chat_format,
 )
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -74,23 +64,9 @@ if __name__ == "__main__":
     train_dataset = train_dataset.map(add_end_of_plan)
     test_dataset = test_dataset.map(add_end_of_plan)
 
-    # train_dataset = train_dataset.select(range(2))
-    # test_dataset = test_dataset.select(range(2))
-
     tokenizer = AutoTokenizer.from_pretrained(
         "Doctor-Shotgun/TinyLlama-1.1B-32k-Instruct"
     )
-
-    def print_tokens_with_ids(txt, add_special_tokens=False):
-        tokens = tokenizer.tokenize(txt, add_special_tokens=add_special_tokens)
-        token_ids = tokenizer.encode(txt, add_special_tokens=add_special_tokens)
-        print(list(zip(tokens, token_ids)))
-
-    # print_tokens_with_ids("\n### Instruction:\n", add_special_tokens=True)
-    # print_tokens_with_ids("<s>\n### Instruction:\n", add_special_tokens=False)
-    #
-    # print_tokens_with_ids('Question: Reply to the currently selected email in Mail with the match details attached and create a new note titled "Festival Notes" to summarize the discussions.\n\n### Response:\n1. open_and_get_file_path("match details")', add_special_tokens=False)
-    # print_tokens_with_ids("\n### Response:\n", add_special_tokens=False)
 
     collator = DataCollatorForCompletionOnlyLM(
         instruction_template=tokenizer.encode(
@@ -130,7 +106,7 @@ if __name__ == "__main__":
 
     model = AutoModelForCausalLM.from_pretrained(
         "Doctor-Shotgun/TinyLlama-1.1B-32k-Instruct",
-        quantization_config=nf4_config
+        quantization_config=nf4_config,  # to speed up forward passes
     )
 
     training_args = SFTConfig(
@@ -148,17 +124,11 @@ if __name__ == "__main__":
         optim="adamw_8bit",
         logging_strategy="steps",
         logging_steps=10,
+        # packing doesn't work with DataCollatorForCompletionOnlyLM
         packing=False,
         eval_packing=False,
         report_to=["tensorboard"],
     )
-
-    def compute_metrics(eval_pred):
-        predictions, labels = eval_pred
-
-        return {
-            "success_rate": np.mean(predictions == labels)
-        }
 
     trainer = SFTTrainer(
         model=model,
@@ -173,8 +143,3 @@ if __name__ == "__main__":
     trainer.train(resume_from_checkpoint=True)
 
     trainer.save_model(args.output_dir)
-
-    del model
-    del trainer
-
-    evaluate()
